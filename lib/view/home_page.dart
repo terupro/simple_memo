@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_memo/utils/utils.dart';
+
+// keyを用意
+const titleKey = 'name';
+const commentKey = 'comment';
+const iconKey = 'icon';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -21,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     init();
   }
 
+  // アプリ起動時に保存したデータを読み込む
   void init() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -45,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 38.0, fontWeight: FontWeight.w100),
               ),
               ListTile(
+                // 保存された場合のデータを表示する
                 leading: icon == false
                     ? const Icon(Icons.chat_bubble_outline)
                     : const Icon(Icons.chat),
@@ -66,10 +72,12 @@ class _HomePageState extends State<HomePage> {
                   ElevatedButton(
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
+                      // データを保存する
                       prefs.setString(titleKey, titleController.text);
                       prefs.setString(commentKey, commentController.text);
                       prefs.setBool(iconKey, true);
                       setState(() {
+                        // データを読み込む
                         title = prefs.getString(titleKey)!;
                         comment = prefs.getString(commentKey)!;
                         prefs.setBool(iconKey, true);
@@ -84,6 +92,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
                       setState(() {
+                        // データを削除する
                         icon = false;
                         title = '';
                         titleController.text = '';
